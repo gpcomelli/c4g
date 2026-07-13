@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>c4g — Progetti</title>
+<meta name="theme-color" content="#0E1116">
+<meta name="description" content="Raccolta di guide e strumenti costruiti con Claude.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1116; --surface:#161C24; --surface-2:#1D242E; --line:#2A3340;
+    --text:#E7ECF2; --muted:#8794A5; --dim:#5D6878;
+    --cold:#4FC3E8; --warm:#FFB020; --hot:#FF5C39;
+  }
+  html[data-theme="light"]{
+    --ink:#F2F5F8; --surface:#FFFFFF; --surface-2:#E9EFF4; --line:#D6DEE6;
+    --text:#141C25; --muted:#5A6B7B; --dim:#8595A4;
+    --cold:#0E7FA8; --warm:#B36B00; --hot:#C2410C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--ink);color:var(--text);transition:background .2s,color .2s;
+       font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:15px;line-height:1.55;
+       padding:0 0 64px;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:640px;margin:0 auto;padding:0 15px}
+
+  header{padding:36px 0 8px}
+  .topbar{display:flex;align-items:flex-start;gap:14px}
+  h1{flex:1;font-family:'Archivo',system-ui,sans-serif;font-weight:800;
+     font-size:clamp(30px,8.5vw,42px);line-height:1;letter-spacing:-.035em}
+  h1 em{font-style:normal;background:linear-gradient(92deg,var(--cold),var(--warm) 55%,var(--hot));
+        -webkit-background-clip:text;background-clip:text;color:transparent}
+  .tag{margin-top:14px;font-size:13px;color:var(--muted);line-height:1.6;max-width:44ch}
+
+  .theme{flex:0 0 auto;width:38px;height:38px;margin-top:2px;display:flex;align-items:center;justify-content:center;
+         background:var(--surface);border:1px solid var(--line);border-radius:10px;color:var(--muted);cursor:pointer;transition:.16s}
+  .theme:hover{color:var(--text);border-color:var(--dim)}
+  .theme:focus-visible{outline:2px solid var(--warm);outline-offset:2px}
+  .theme svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .theme .moon{display:none}
+  html[data-theme="light"] .theme .moon{display:block}
+  html[data-theme="light"] .theme .sun{display:none}
+
+  .count{margin-top:34px;display:flex;align-items:center;gap:10px}
+  .count span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:500}
+  .count .rule{flex:1;height:1px;background:var(--line)}
+
+  .grid{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+
+  a.proj{
+    display:block;position:relative;text-decoration:none;color:inherit;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:20px 46px 20px 22px;transition:.18s;
+  }
+  a.proj::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+                 border-radius:14px 0 0 14px;background:var(--accent,var(--dim))}
+  a.proj::after{content:"";position:absolute;right:20px;top:50%;width:8px;height:8px;
+                border-right:1.6px solid var(--dim);border-top:1.6px solid var(--dim);
+                transform:translateY(-50%) rotate(45deg);transition:.18s}
+  a.proj:hover{border-color:var(--dim);transform:translateX(2px)}
+  a.proj:hover::after{border-color:var(--text);right:16px}
+  a.proj:focus-visible{outline:2px solid var(--warm);outline-offset:2px}
+  html[data-theme="light"] a.proj{box-shadow:0 1px 2px rgba(20,28,37,.05)}
+
+  .pname{font-family:'Archivo',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.015em}
+  .pdesc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:7px}
+  .pmeta{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-size:10px;letter-spacing:.05em;padding:4px 9px;border-radius:6px;
+        border:1px solid var(--line);color:var(--dim)}
+
+  footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
+         font-size:11.5px;color:var(--dim);line-height:1.8}
+  footer a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script>
+(function(){
+  var m = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  document.documentElement.setAttribute('data-theme', m ? 'light' : 'dark');
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="topbar">
+      <h1>c4g<em>.</em></h1>
+      <button class="theme" id="themeBtn" aria-label="Cambia tema" title="Cambia tema">
+        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 12H2M22 12h-2.2M5.6 5.6 4.1 4.1M19.9 19.9l-1.5-1.5M18.4 5.6l1.5-1.5M4.1 19.9l1.5-1.5"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.4A8.2 8.2 0 0 1 9.6 4a8.4 8.4 0 1 0 10.4 10.4Z"/></svg>
+      </button>
+    </div>
+    <p class="tag">Guide e strumenti costruiti con Claude. Riferimenti personali, verificati sulle fonti ufficiali — non documentazione.</p>
+  </header>
+
+  <div class="count">
+    <span>Progetti</span><span class="rule"></span><span id="n">1</span>
+  </div>
+
+  <nav class="grid">
+
+    <a class="proj" href="./x2d-materiali/" style="--accent:#FFB020">
+      <div class="pname">x2d — materiali</div>
+      <div class="pdesc">Cosa può stampare la Bambu Lab X2D: 45 filamenti, compatibilità per hotend principale, ausiliario e Filament Track Switch, usi tipici, accessori richiesti, multicolore, camera e impostazioni ufficiali.</div>
+      <div class="pmeta">
+        <span class="chip">3D printing</span>
+        <span class="chip">Bambu Lab</span>
+        <span class="chip">Riferimento</span>
+      </div>
+    </a>
+
+  </nav>
+
+  <footer>
+    <a href="https://github.com/gpcomelli/c4g">Sorgente su GitHub</a><br>
+    Ogni pagina cita le fonti da cui è costruita. Verifica sempre prima di un lavoro importante.
+  </footer>
+
+</div>
+
+<script>
+const root=document.documentElement;
+const mq=window.matchMedia('(prefers-color-scheme: light)');
+let manual=false;
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  manual=true;
+  root.setAttribute('data-theme', root.getAttribute('data-theme')==='light' ? 'dark' : 'light');
+});
+mq.addEventListener('change',e=>{ if(!manual) root.setAttribute('data-theme', e.matches?'light':'dark'); });
+
+document.getElementById('n').textContent =
+  document.querySelectorAll('a.proj').length.toString().padStart(2,'0');
+</script>
+</body>
+</html>
